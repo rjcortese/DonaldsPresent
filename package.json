@@ -1,0 +1,25 @@
+{
+  "name": "nodehelloworldreactjs",
+  "version": "1.0.0",
+  "description": "Hello world web app using Node and React and JS",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjcortese/NodeHelloWorldReactJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rjcortese/NodeHelloWorldReactJS/issues"
+  },
+  "homepage": "https://github.com/rjcortese/NodeHelloWorldReactJS#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
+}
