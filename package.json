@@ -1,7 +1,7 @@
 {
-  "name": "nodehelloworldreactjs",
+  "name": "donaldspresent",
   "version": "1.0.0",
-  "description": "Hello world web app using Node and React and JS",
+  "description": "Node.js Express and React web app that displays the best exchange rates for 5 bitcoin to Ethereum (Huey), Litecoin (Luey), and DASH (Duey).",
   "main": "src/server/index.js",
   "scripts": {
     "start": "node src/server/index.js",
@@ -22,6 +22,8 @@
   "homepage": "https://github.com/rjcortese/NodeHelloWorldReactJS#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "node-fetch": "^2.1.2",
+    "pg-promise": "^8.4.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
   },
