@@ -6,7 +6,7 @@ class TitleBanner extends Component{
     render() {
         return(
             <div className="TitleBanner">
-                <h1>"Donald's Present"</h1>
+                <h1>{"Donald's Present"}</h1>
             </div>
         );
     }

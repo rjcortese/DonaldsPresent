@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const fetch = require('node-fetch');
 const pgp = require('pg-promise')();
-const db = pgp.('postgres://postgres:duckingit@localhost:5432/duckdb');
+const db = pgp('postgres://postgres:duckingit@localhost:5432/duckdb');
 
 db.any("CREATE TABLE IF NOT EXISTS exchange_data (exchange varchar(30), symbol varchar(10), rate real, timestamp timestamp);")
     .then((res) => {
@@ -27,7 +27,7 @@ let exchangeRateCache = {
         eth: null,
         ltc: null
     },
-    binanace: {
+    binance: {
         dash: null,
         eth: null,
         ltc: null
@@ -48,22 +48,23 @@ function fetchKrakenRates(db, cache) {
     fetch('https://api.kraken.com/0/public/Ticker?pair=ETHXBT,DASHXBT,LTCXBT')
         .then((res) => {
             return res.json();
-        }
+        })
         .then((myjson) => {
             //cache
             cache.kraken.dash = myjson.result.DASHXBT.a[0];
             cache.kraken.eth = myjson.result.XETHXXBT.a[0];
             cache.kraken.ltc = myjson.result.XLTCXXBT.a[0];
             //store in db
-        }
+        })
+        .catch(err => console.log(err));
 }
 
 function fetchBittrexRates(db, cache) {
     fetch('https://bittrex.com/api/v1.1/public/getticker?market=BTC-ETH')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
             cache.bittrex.eth = myjson.result.Ask;
             //store in db
@@ -71,10 +72,10 @@ function fetchBittrexRates(db, cache) {
         .catch(err => console.log(err));
 
     fetch('https://bittrex.com/api/v1.1/public/getticker?market=BTC-LTC')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
             cache.bittrex.ltc = myjson.result.Ask;
             //store in db
@@ -82,10 +83,10 @@ function fetchBittrexRates(db, cache) {
         .catch(err => console.log(err));
 
     fetch('https://bittrex.com/api/v1.1/public/getticker?market=BTC-DASH')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
             cache.bittrex.dash = myjson.result.Ask;
             //store in db
@@ -95,10 +96,10 @@ function fetchBittrexRates(db, cache) {
 
 function fetchBinanceRates(db, cache) {
     fetch('https://api.binance.com/api/v3/ticker/price')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             for (let i = 0; i < myjson.length; i++) {
                 if (myjson[i].symbol === 'ETHBTC') {
                     //cache
@@ -122,10 +123,10 @@ function fetchBinanceRates(db, cache) {
 
 function fetchCoincapRates(db, cache) {
     fetch('https://coincap.io/page/ETH')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
             cache.coincap.eth = myjson.price_btc;
             //store in db
@@ -133,10 +134,10 @@ function fetchCoincapRates(db, cache) {
         .catch(err => console.log(err));
 
     fetch('https://coincap.io/page/DASH')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
             cache.coincap.dash = myjson.price_btc;
             //store in db
@@ -144,12 +145,12 @@ function fetchCoincapRates(db, cache) {
         .catch(err => console.log(err));
 
     fetch('https://coincap.io/page/LTC')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
-            cap.coincap.ltc = myjson.price_btc;
+            cache.coincap.ltc = myjson.price_btc;
             //store in db
         })
         .catch(err => console.log(err));
@@ -157,10 +158,10 @@ function fetchCoincapRates(db, cache) {
 
 function fetchPoloniexRates(db, cache) {
     fetch('https://poloniex.com/public?command=returnTicker')
-        .then(function(res) {
+        .then((res) => {
             return res.json();
         })
-        .then(function(myjson) {
+        .then((myjson) => {
             //cache
             cache.poloniex.dash = myjson.BTC_DASH.lowestAsk;
             cache.poloniex.eth = myjson.BTC_ETH.lowestAsk;
@@ -170,7 +171,7 @@ function fetchPoloniexRates(db, cache) {
         .catch(err => console.log(err));
 }
 
-let fetchExchangeRates = function(db, cache) {
+function fetchExchangeRates(db, cache) {
     fetchKrakenRates(db, cache);
     fetchBittrexRates(db, cache);
     fetchBinanceRates(db, cache);
@@ -178,7 +179,7 @@ let fetchExchangeRates = function(db, cache) {
     fetchPoloniexRates(db, cache);
 }
 
-setInterval(fetchExchangeRates(db, exchangeRateCache), 1500);
+setInterval(function() { fetchExchangeRates(db, exchangeRateCache); }, 1500);
 
 app.use(express.static('dist'));
 
