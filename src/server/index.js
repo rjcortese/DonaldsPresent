@@ -200,7 +200,7 @@ async function fetchBinanceRates(db, cache) {
 
                 //cache
                 cache.exchanges.binance.eth = ethRate;
-                cach.updateBestEth();
+                cache.updateBestEth();
 
                 //store in db
                 await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
@@ -344,7 +344,7 @@ async function fetchExchangeRates(db, cache) {
 }
 
 
-interval(async () => { await fetchExchangeRates(db, cache) }, 1500, { stopOnError: false });
+interval(async () => { await fetchExchangeRates(db, exchangeRateCache); }, 1500, { stopOnError: true });
 
 
 function convertRateToCurrency(rate) {
