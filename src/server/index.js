@@ -90,6 +90,27 @@ let exchangeRateCache = {
 };
 
 
+//generate bitcoin addresses for the children
+let hueyAddress = null;
+let dueyAddress = null;
+let lueyAddress = null;
+
+fetch('https://api.blockcypher.com/v1/bcy/test/addrs', { method: 'POST' })
+    .then((result) => { return result.json() })
+    .then((myjson) => { hueyAddress = myjson.address })
+    .catch((err) => { console.log(err) });
+
+fetch('https://api.blockcypher.com/v1/bcy/test/addrs', { method: 'POST' })
+    .then((result) => { return result.json() })
+    .then((myjson) => { dueyAddress = myjson.address })
+    .catch((err) => { console.log(err) });
+
+fetch('https://api.blockcypher.com/v1/bcy/test/addrs', { method: 'POST' })
+    .then((result) => { return result.json() })
+    .then((myjson) => { lueyAddress = myjson.address })
+    .catch((err) => { console.log(err) });
+
+
 async function fetchKrakenRates(db, cache) {
     try {
         const result = await fetch('https://api.kraken.com/0/public/Ticker?pair=ETHXBT,DASHXBT,LTCXBT');
