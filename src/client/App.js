@@ -15,7 +15,7 @@ class TitleBanner extends Component{
 class Panel extends Component{
     render() {
         return(
-            <div className="Panel">
+            <div className="Panel" highlight={this.props.highlight}>
                 {this.props.value}
             </div>
         );
@@ -26,7 +26,7 @@ class GridTopRow extends Component{
     render() {
         return(
             <div className="GridTopRow">
-            <Panel value=""/>
+            <Panel value="Exchange:"/>
             <Panel value="Kraken"/>
             <Panel value="Bittrex"/>
             <Panel value="Binance"/>
@@ -37,16 +37,183 @@ class GridTopRow extends Component{
     }
 }
 
-class GridRow extends Component{
+class GridHueyRow extends Component{
+    constructor(props){
+        super(props);
+
+        this.state = {  
+            kraken: {
+                rate: null,
+                converted: null
+            },
+            bittrex: {
+                rate: null,
+                converted: null
+            },
+            binance: {
+                rate: null,
+                converted: null
+            },
+            coincap: {
+                rate: null,
+                converted: null
+            },
+            poloniex: {
+                rate: null,
+                converted: null
+            },
+            best: null
+        };
+    }
+
+    componentDidMount() {
+        this.timerID = setInterval(() => {
+            fetch('/huey')
+                .then((res) => {
+                    return res.json();
+                })
+                .then((myjson) => {
+                    console.log(myjson);
+                    this.setState(myjson);
+                })
+                .catch((err) => console.log(err));
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
     render(){
         return(
-            <div className="GridRow">
-            <Panel value={this.props.value}/>
-            <Panel value="kraken price"/>
-            <Panel value="bittrex price"/>
-            <Panel value="binance price"/>
-            <Panel value="coincap price"/>
-            <Panel value="poloniex price"/>
+            <div className="GridHueyRow">
+            <Panel value="Huey (Ethereum)"/>
+            <Panel value={this.state.kraken.rate} highlight={(this.state.best === "kraken").toString()}/>
+            <Panel value={this.state.bittrex.rate} highlight={(this.state.best === "bittrex").toString()}/>
+            <Panel value={this.state.binance.rate} highlight={(this.state.best === "binance").toString()}/>
+            <Panel value={this.state.coincap.rate} highlight={(this.state.best === "coincap").toString()}/>
+            <Panel value={this.state.poloniex.rate} highlight={(this.state.best === "poloniex").toString()}/>
+            </div>
+        );
+    }
+}
+
+class GridDueyRow extends Component{
+    constructor(props){
+        super(props);
+
+        this.state = {  
+            kraken: {
+                rate: null,
+                converted: null
+            },
+            bittrex: {
+                rate: null,
+                converted: null
+            },
+            binance: {
+                rate: null,
+                converted: null
+            },
+            coincap: {
+                rate: null,
+                converted: null
+            },
+            poloniex: {
+                rate: null,
+                converted: null
+            },
+            best: null
+        };
+    }
+
+    componentDidMount() {
+        this.timerID = setInterval(() => {
+            fetch('/duey')
+                .then((res) => {
+                    return res.json();
+                })
+                .then((myjson) => {
+                    console.log(myjson);
+                    this.setState(myjson);
+                })
+                .catch((err) => console.log(err));
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
+    render(){
+        return(
+            <div className="GridDueyRow">
+            <Panel value="Duey (DASH)"/>
+            <Panel value={this.state.kraken.rate} highlight={(this.state.best === "kraken").toString()}/>
+            <Panel value={this.state.bittrex.rate} highlight={(this.state.best === "bittrex").toString()}/>
+            <Panel value={this.state.binance.rate} highlight={(this.state.best === "binance").toString()}/>
+            <Panel value={this.state.coincap.rate} highlight={(this.state.best === "coincap").toString()}/>
+            <Panel value={this.state.poloniex.rate} highlight={(this.state.best === "poloniex").toString()}/>
+            </div>
+        );
+    }
+}
+
+class GridLueyRow extends Component{
+    constructor(props){
+        super(props);
+
+        this.state = {  
+            kraken: {
+                rate: null,
+                converted: null
+            },
+            bittrex: {
+                rate: null,
+                converted: null
+            },
+            binance: {
+                rate: null,
+                converted: null
+            },
+            coincap: {
+                rate: null,
+                converted: null
+            },
+            poloniex: {
+                rate: null,
+                converted: null
+            },
+            best: null
+        };
+    }
+
+    componentDidMount() {
+        this.timerID = setInterval(() => {
+            fetch('/luey')
+                .then((res) => {
+                    return res.json();
+                })
+                .then((myjson) => {
+                    this.setState(myjson);
+                })
+                .catch((err) => console.log(err));
+        }, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
+    render(){
+        return(
+            <div className="GridLueyRow">
+            <Panel value="Luey (Litecoin)"/>
+            <Panel value={this.state.kraken.rate} highlight={(this.state.best === "kraken").toString()}/>
+            <Panel value={this.state.bittrex.rate} highlight={(this.state.best === "bittrex").toString()}/>
+            <Panel value={this.state.binance.rate} highlight={(this.state.best === "binance").toString()}/>
+            <Panel value={this.state.coincap.rate} highlight={(this.state.best === "coincap").toString()}/>
+            <Panel value={this.state.poloniex.rate} highlight={(this.state.best === "poloniex").toString()}/>
             </div>
         );
     }
@@ -57,31 +224,15 @@ class Grid extends Component {
         return(
             <div className="Grid">
             <GridTopRow/>
-            <GridRow value="Huey (Ethereum)"/>
-            <GridRow value="Duey (DASH)"/>
-            <GridRow value="Luey (Litecoin)"/>
+            <GridHueyRow/>
+            <GridDueyRow/>
+            <GridLueyRow/>
             </div>
         );
     }
 }
 
 class App extends Component{
-    constructor(props) {
-        super(props);
-        this.state = { magicword : null };
-    }
-
-/*    componentDidMount() {
-        fetch('/huey')
-        .then((response) => {
-            return response.json();
-        })
-        .then((myJson) => {
-            console.log(myJson);
-            this.setState({magicword : myJson.magicword})
-        })
-    }
-*/
     render() {
         return(
             <div className="App">

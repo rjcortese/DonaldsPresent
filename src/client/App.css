@@ -18,6 +18,14 @@
     font-weight: bold;
 }
 
+[highlight="false"] {
+    background-color: #F5F5F5;
+}
+
+[highlight="true"] {
+    background-color: #00CED1;
+}
+
 .Grid{
     display: table;
     table-layout: fixed;
@@ -25,10 +33,6 @@
     height: 500px;
 }
 
-.GridRow{
-    display: table-row;
-}
-
-.GridTopRow{
+.GridTopRow, .GridHueyRow, .GridDueyRow, .GridLueyRow{
     display: table-row;
 }
