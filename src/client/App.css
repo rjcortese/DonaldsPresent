@@ -36,3 +36,9 @@
 .GridTopRow, .GridHueyRow, .GridDueyRow, .GridLueyRow{
     display: table-row;
 }
+
+.ToggleButton {
+    margin: auto;
+    display: block;
+    height: 75px;
+}

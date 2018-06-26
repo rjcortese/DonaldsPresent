@@ -421,14 +421,26 @@ app.get('/huey', (req, res) => {
     res.send(new Rates(exchangeRateCache, "eth"));
 });
 
+app.get('/huey/address', (req, res) => {
+    res.send({ address: hueyAddress });
+});
+
 app.get('/luey', (req, res) => {
     //return litecoin data from cache
     res.send(new Rates(exchangeRateCache, "ltc"));
 });
 
+app.get('/luey/address', (req, res) => {
+    res.send({ address: lueyAddress });
+});
+
 app.get('/duey', (req, res) => {
     //return dash data from cache
     res.send(new Rates(exchangeRateCache, "dash"));
+});
+
+app.get('/duey/address', (req, res) => {
+    res.send({ address: dueyAddress });
 });
 
 app.get('*', (req, res) => {
