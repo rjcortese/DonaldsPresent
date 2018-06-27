@@ -111,6 +111,7 @@ fetch('https://api.blockcypher.com/v1/bcy/test/addrs', { method: 'POST' })
     .catch((err) => { console.log(err) });
 
 
+//functions that get data from exchanges
 async function fetchKrakenRates(db, cache) {
     try {
         const result = await fetch('https://api.kraken.com/0/public/Ticker?pair=ETHXBT,DASHXBT,LTCXBT');
@@ -365,6 +366,7 @@ async function fetchExchangeRates(db, cache) {
 }
 
 
+//do the fetching of exchange data periodically
 interval(async () => { await fetchExchangeRates(db, exchangeRateCache); }, 1500, { stopOnError: true });
 
 
@@ -373,41 +375,32 @@ function convertRateToCurrency(rate) {
 }
 
 
+//an object to send as response to some incoming api calls
 function Rates(cache, symbol) {
     this.kraken = {
-        rate: null,
-        converted: null
+        rate: cache.exchanges.kraken[symbol],
+        converted: convertRateToCurrency(cache.exchanges.kraken[symbol])
     };
-    this.kraken.rate = cache.exchanges.kraken[symbol];
-    this.kraken.converted = convertRateToCurrency(cache.exchanges.kraken[symbol]);
 
     this.bittrex = {
-        rate: null,
-        converted: null
+        rate: cache.exchanges.bittrex[symbol],
+        converted: convertRateToCurrency(cache.exchanges.bittrex[symbol])
     };
-    this.bittrex.rate = cache.exchanges.bittrex[symbol];
-    this.bittrex.converted = convertRateToCurrency(cache.exchanges.bittrex[symbol]);
 
     this.binance = {
-        rate: null,
-        converted: null
+        rate: cache.exchanges.binance[symbol],
+        converted: convertRateToCurrency(cache.exchanges.binance[symbol])
     };
-    this.binance.rate = cache.exchanges.binance[symbol];
-    this.binance.converted = convertRateToCurrency(cache.exchanges.binance[symbol]);
 
     this.coincap = {
-        rate: null,
-        converted: null
+        rate: cache.exchanges.coincap[symbol],
+        converted: convertRateToCurrency(cache.exchanges.coincap[symbol])
     };
-    this.coincap.rate = cache.exchanges.coincap[symbol];
-    this.coincap.converted = convertRateToCurrency(cache.exchanges.coincap[symbol]);
 
     this.poloniex = {
-        rate: null,
-        converted: null
+        rate: cache.exchanges.poloniex[symbol],
+        converted: convertRateToCurrency(cache.exchanges.poloniex[symbol])
     };
-    this.poloniex.rate = cache.exchanges.poloniex[symbol];
-    this.poloniex.converted = convertRateToCurrency(cache.exchanges.poloniex[symbol]);
 
     this.best = cache.best[symbol].exchangeName;
 }
@@ -422,6 +415,7 @@ app.get('/huey', (req, res) => {
 });
 
 app.get('/huey/address', (req, res) => {
+    //return huey's btc address
     res.send({ address: hueyAddress });
 });
 
@@ -431,6 +425,7 @@ app.get('/luey', (req, res) => {
 });
 
 app.get('/luey/address', (req, res) => {
+    //return luey's btc address
     res.send({ address: lueyAddress });
 });
 
@@ -440,11 +435,16 @@ app.get('/duey', (req, res) => {
 });
 
 app.get('/duey/address', (req, res) => {
+    //return duey's btc address
     res.send({ address: dueyAddress });
 });
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../../public/index.html'));
+});
+
+app.use(function (req, res, next) {
+  res.status(404).send("Looks like there's nothing here.... :(");
 });
 
 app.listen(3232, () => console.log('Donalds Present server listening on port 3232!!'));

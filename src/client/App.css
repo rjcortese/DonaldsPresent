@@ -1,25 +1,37 @@
 .App {
     margin: 1rem;
     font-family: Arial, Helvetica, sans-serif;
-    min-width: 1000px;
-    border: 1px solid #999;
+    min-width: 1200px;
+    font-weight: bold;
 }
 
 .TitleBanner {
-    border: 1px solid #999;
+    border-top: 2px solid #999;
+    border-left: 2px solid #999;
+    border-right: 2px solid #999;
+    border-bottom: 1px solid #999;
     text-align: center;
+    background-color: #A1AFCA;
 }
 
-.Panel {
+.CIPanel {
+    width: 20%;
+}
+
+.Panel, .DPanel{
+    width: 16%;
+}
+
+.Panel, .DPanel, .CIPanel {
     border: 1px solid #999;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-    font-weight: bold;
+    background-color: #BBE9DB;
 }
 
 [highlight="false"] {
-    background-color: #F5F5F5;
+    background-color: #A1AFCA;
 }
 
 [highlight="true"] {
@@ -29,8 +41,10 @@
 .Grid{
     display: table;
     table-layout: fixed;
-    width: 100%;
     height: 500px;
+    border-left: 1px solid #999;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
 }
 
 .GridTopRow, .GridHueyRow, .GridDueyRow, .GridLueyRow{
@@ -41,4 +55,5 @@
     margin: auto;
     display: block;
     height: 75px;
+    font-weight: bold;
 }

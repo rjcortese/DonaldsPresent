@@ -7,20 +7,46 @@ class TitleBanner extends Component{
         return(
             <div className="TitleBanner">
                 <h1>{"Donald's Present"}</h1>
+                <p>{this.props.convertedView ? "The Value of 5 Bitcoin" : "Exchange Rates"}</p>
             </div>
         );
     }
 }
 
+
 class Panel extends Component{
     render() {
         return(
-            <div className="Panel" highlight={this.props.highlight}>
+            <div className="Panel">
                 {this.props.value}
             </div>
         );
     }
 }
+
+
+class ChildInfoPanel extends Component{
+    render() {
+        return(
+            <div className="CIPanel">
+                <div>{this.props.name}</div>
+                <div>Bitcoin Address: {this.props.address}</div>
+            </div>
+        );
+    }
+}
+
+
+class DataPanel extends Component{
+    render() {
+        return(
+            <div className="DPanel" highlight={this.props.highlight}>
+                {this.props.value} {this.props.units}
+            </div>
+        );
+    }
+}
+
 
 class GridTopRow extends Component{
     render() {
@@ -37,6 +63,23 @@ class GridTopRow extends Component{
     }
 }
 
+
+function ExchangeInfo() {
+    this.rate = null;
+    this.converted = null;
+}
+
+
+function GridRowStateObject() {
+    this.kraken = new ExchangeInfo();
+    this.bittrex = new ExchangeInfo();
+    this.binance = new ExchangeInfo();
+    this.coincap = new ExchangeInfo();
+    this.poloniex = new ExchangeInfo();
+    this.best = null;
+}
+
+
 class GridHueyRow extends Component{
     constructor(props){
         super(props);
@@ -51,29 +94,7 @@ class GridHueyRow extends Component{
             })
             .catch((err) => console.log(err));
 
-        this.state = {  
-            kraken: {
-                rate: null,
-                converted: null
-            },
-            bittrex: {
-                rate: null,
-                converted: null
-            },
-            binance: {
-                rate: null,
-                converted: null
-            },
-            coincap: {
-                rate: null,
-                converted: null
-            },
-            poloniex: {
-                rate: null,
-                converted: null
-            },
-            best: null
-        };
+        this.state = new GridRowStateObject();
     }
 
     componentDidMount() {
@@ -98,28 +119,29 @@ class GridHueyRow extends Component{
         if (this.props.convertedView) {
             return(
                 <div className="GridHueyRow">
-                <Panel value={"Huey (Ethereum)\nAddress: " + this.hueyAddress}/>
-                <Panel value={this.state.kraken.converted} highlight={(this.state.best === "kraken").toString()}/>
-                <Panel value={this.state.bittrex.converted} highlight={(this.state.best === "bittrex").toString()}/>
-                <Panel value={this.state.binance.converted} highlight={(this.state.best === "binance").toString()}/>
-                <Panel value={this.state.coincap.converted} highlight={(this.state.best === "coincap").toString()}/>
-                <Panel value={this.state.poloniex.converted} highlight={(this.state.best === "poloniex").toString()}/>
+                <ChildInfoPanel name={"Huey (wants Ethereum)"}  address={this.hueyAddress}/>
+                <DataPanel value={this.state.kraken.converted} units="ETH" highlight={(this.state.best === "kraken").toString()}/>
+                <DataPanel value={this.state.bittrex.converted} units="ETH" highlight={(this.state.best === "bittrex").toString()}/>
+                <DataPanel value={this.state.binance.converted} units="ETH" highlight={(this.state.best === "binance").toString()}/>
+                <DataPanel value={this.state.coincap.converted} units="ETH" highlight={(this.state.best === "coincap").toString()}/>
+                <DataPanel value={this.state.poloniex.converted} units="ETH" highlight={(this.state.best === "poloniex").toString()}/>
                 </div>
             );
         } else {
             return(
                 <div className="GridHueyRow">
-                <Panel value={"Huey (Ethereum)\nAddress: " + this.hueyAddress}/>
-                <Panel value={this.state.kraken.rate} highlight={(this.state.best === "kraken").toString()}/>
-                <Panel value={this.state.bittrex.rate} highlight={(this.state.best === "bittrex").toString()}/>
-                <Panel value={this.state.binance.rate} highlight={(this.state.best === "binance").toString()}/>
-                <Panel value={this.state.coincap.rate} highlight={(this.state.best === "coincap").toString()}/>
-                <Panel value={this.state.poloniex.rate} highlight={(this.state.best === "poloniex").toString()}/>
+                <ChildInfoPanel name={"Huey (wants Ethereum)"}  address={this.hueyAddress}/>
+                <DataPanel value={this.state.kraken.rate} units="BTC per ETH" highlight={(this.state.best === "kraken").toString()}/>
+                <DataPanel value={this.state.bittrex.rate} units="BTC per ETH" highlight={(this.state.best === "bittrex").toString()}/>
+                <DataPanel value={this.state.binance.rate} units="BTC per ETH" highlight={(this.state.best === "binance").toString()}/>
+                <DataPanel value={this.state.coincap.rate} units="BTC per ETH" highlight={(this.state.best === "coincap").toString()}/>
+                <DataPanel value={this.state.poloniex.rate} units="BTC per ETH" highlight={(this.state.best === "poloniex").toString()}/>
                 </div>
             );
         }
     }
 }
+
 
 class GridDueyRow extends Component{
     constructor(props){
@@ -135,29 +157,7 @@ class GridDueyRow extends Component{
             })
             .catch((err) => console.log(err));
 
-        this.state = {  
-            kraken: {
-                rate: null,
-                converted: null
-            },
-            bittrex: {
-                rate: null,
-                converted: null
-            },
-            binance: {
-                rate: null,
-                converted: null
-            },
-            coincap: {
-                rate: null,
-                converted: null
-            },
-            poloniex: {
-                rate: null,
-                converted: null
-            },
-            best: null
-        };
+        this.state = new GridRowStateObject();
     }
 
     componentDidMount() {
@@ -182,29 +182,30 @@ class GridDueyRow extends Component{
         if (this.props.convertedView) {
             return(
                 <div className="GridDueyRow">
-                <Panel value={"Duey (DASH)\nAddress: " + this.dueyAddress}/>
-                <Panel value={this.state.kraken.converted} highlight={(this.state.best === "kraken").toString()}/>
-                <Panel value={this.state.bittrex.converted} highlight={(this.state.best === "bittrex").toString()}/>
-                <Panel value={this.state.binance.converted} highlight={(this.state.best === "binance").toString()}/>
-                <Panel value={this.state.coincap.converted} highlight={(this.state.best === "coincap").toString()}/>
-                <Panel value={this.state.poloniex.converted} highlight={(this.state.best === "poloniex").toString()}/>
+                <ChildInfoPanel name={"Duey (wants DASH)"} address={this.dueyAddress}/>
+                <DataPanel value={this.state.kraken.converted} units="DASH" highlight={(this.state.best === "kraken").toString()}/>
+                <DataPanel value={this.state.bittrex.converted} units="DASH" highlight={(this.state.best === "bittrex").toString()}/>
+                <DataPanel value={this.state.binance.converted} units="DASH" highlight={(this.state.best === "binance").toString()}/>
+                <DataPanel value={this.state.coincap.converted} units="DASH" highlight={(this.state.best === "coincap").toString()}/>
+                <DataPanel value={this.state.poloniex.converted} units="DASH" highlight={(this.state.best === "poloniex").toString()}/>
                 </div>
             );
 
         } else {
             return(
                 <div className="GridDueyRow">
-                <Panel value={"Duey (DASH)\nAddress: " + this.dueyAddress}/>
-                <Panel value={this.state.kraken.rate} highlight={(this.state.best === "kraken").toString()}/>
-                <Panel value={this.state.bittrex.rate} highlight={(this.state.best === "bittrex").toString()}/>
-                <Panel value={this.state.binance.rate} highlight={(this.state.best === "binance").toString()}/>
-                <Panel value={this.state.coincap.rate} highlight={(this.state.best === "coincap").toString()}/>
-                <Panel value={this.state.poloniex.rate} highlight={(this.state.best === "poloniex").toString()}/>
+                <ChildInfoPanel name={"Duey (wants DASH)"} address={this.dueyAddress}/>
+                <DataPanel value={this.state.kraken.rate} units="BTC per DASH" highlight={(this.state.best === "kraken").toString()}/>
+                <DataPanel value={this.state.bittrex.rate} units="BTC per DASH" highlight={(this.state.best === "bittrex").toString()}/>
+                <DataPanel value={this.state.binance.rate} units="BTC per DASH" highlight={(this.state.best === "binance").toString()}/>
+                <DataPanel value={this.state.coincap.rate} units="BTC per DASH" highlight={(this.state.best === "coincap").toString()}/>
+                <DataPanel value={this.state.poloniex.rate} units="BTC per DASH" highlight={(this.state.best === "poloniex").toString()}/>
                 </div>
             );
         }
     }
 }
+
 
 class GridLueyRow extends Component{
     constructor(props){
@@ -220,29 +221,7 @@ class GridLueyRow extends Component{
             })
             .catch((err) => console.log(err));
 
-        this.state = {  
-            kraken: {
-                rate: null,
-                converted: null
-            },
-            bittrex: {
-                rate: null,
-                converted: null
-            },
-            binance: {
-                rate: null,
-                converted: null
-            },
-            coincap: {
-                rate: null,
-                converted: null
-            },
-            poloniex: {
-                rate: null,
-                converted: null
-            },
-            best: null
-        };
+        this.state = new GridRowStateObject();
     }
 
     componentDidMount() {
@@ -266,28 +245,29 @@ class GridLueyRow extends Component{
         if (this.props.convertedView) {
             return(
                 <div className="GridLueyRow">
-                <Panel value={"Luey (Litecoin)\nAddress: " + this.lueyAddress}/>
-                <Panel value={this.state.kraken.converted} highlight={(this.state.best === "kraken").toString()}/>
-                <Panel value={this.state.bittrex.converted} highlight={(this.state.best === "bittrex").toString()}/>
-                <Panel value={this.state.binance.converted} highlight={(this.state.best === "binance").toString()}/>
-                <Panel value={this.state.coincap.converted} highlight={(this.state.best === "coincap").toString()}/>
-                <Panel value={this.state.poloniex.converted} highlight={(this.state.best === "poloniex").toString()}/>
+                <ChildInfoPanel name={"Luey (wants Litecoin)"} address={this.lueyAddress}/>
+                <DataPanel value={this.state.kraken.converted} units="LTC" highlight={(this.state.best === "kraken").toString()}/>
+                <DataPanel value={this.state.bittrex.converted} units="LTC" highlight={(this.state.best === "bittrex").toString()}/>
+                <DataPanel value={this.state.binance.converted} units="LTC" highlight={(this.state.best === "binance").toString()}/>
+                <DataPanel value={this.state.coincap.converted} units="LTC" highlight={(this.state.best === "coincap").toString()}/>
+                <DataPanel value={this.state.poloniex.converted} units="LTC" highlight={(this.state.best === "poloniex").toString()}/>
                 </div>
             );
         } else {
             return(
                 <div className="GridLueyRow">
-                <Panel value={"Luey (Litecoin)\nAddress: " + this.lueyAddress}/>
-                <Panel value={this.state.kraken.rate} highlight={(this.state.best === "kraken").toString()}/>
-                <Panel value={this.state.bittrex.rate} highlight={(this.state.best === "bittrex").toString()}/>
-                <Panel value={this.state.binance.rate} highlight={(this.state.best === "binance").toString()}/>
-                <Panel value={this.state.coincap.rate} highlight={(this.state.best === "coincap").toString()}/>
-                <Panel value={this.state.poloniex.rate} highlight={(this.state.best === "poloniex").toString()}/>
+                <ChildInfoPanel name={"Luey (wants Litecoin)"} address={this.lueyAddress}/>
+                <DataPanel value={this.state.kraken.rate} units="BTC per LTC" highlight={(this.state.best === "kraken").toString()}/>
+                <DataPanel value={this.state.bittrex.rate} units="BTC per LTC" highlight={(this.state.best === "bittrex").toString()}/>
+                <DataPanel value={this.state.binance.rate} units="BTC per LTC" highlight={(this.state.best === "binance").toString()}/>
+                <DataPanel value={this.state.coincap.rate} units="BTC per LTC" highlight={(this.state.best === "coincap").toString()}/>
+                <DataPanel value={this.state.poloniex.rate} units="BTC per LTC" highlight={(this.state.best === "poloniex").toString()}/>
                 </div>
             );
         }
     }
 }
+
 
 class Grid extends Component {
     render(){
@@ -301,6 +281,7 @@ class Grid extends Component {
         );
     }
 }
+
 
 class App extends Component{
     constructor(props) {
@@ -319,7 +300,7 @@ class App extends Component{
     render() {
         return(
             <div className="App">
-            <TitleBanner/>
+            <TitleBanner convertedView={this.state.convertedView}/>
             <Grid convertedView={this.state.convertedView}/>
             <button className="ToggleButton" onClick={this.toggleView}>
             {this.state.convertedView ? 'Display Exchange Rates' : 'Display Value of 5 Bitcoin'}
