@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const helmet = require('helmet');
 const fetch = require('node-fetch');
 const interval = require('interval-promise');
 const pgp = require('pg-promise')();
@@ -407,6 +408,7 @@ function Rates(cache, symbol) {
 
 
 //Express stuff for handling incoming connections
+app.use(helmet());
 app.use(express.static('dist'));
 
 app.get('/huey', (req, res) => {
