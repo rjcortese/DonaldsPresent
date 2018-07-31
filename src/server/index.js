@@ -1,17 +1,19 @@
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const helmet = require('helmet');
 const fetch = require('node-fetch');
 const interval = require('interval-promise');
 const pgp = require('pg-promise')();
-const db = pgp('postgres://postgres:duckingit@localhost:5432/duckdb');
 
-const app = express();
+const db = pgp('postgres://postgres:duckingit@localhost:5432/duckdb');
 
 const NUM_BTC = 5.0;    // Donald will give each child 5 Bitcoin
 
+const app = express();
 
 // create a new table in the db to store data
+//  drop old table because this is just a demo
 db.any("DROP TABLE IF EXISTS exchange_data;")
     .then(() => { db.any("CREATE TABLE exchange_data (exchange varchar(30), symbol varchar(10), rate real, timestamp timestamp DEFAULT NOW());"); })
     .catch((err) => {
@@ -358,6 +360,7 @@ async function fetchPoloniexRates(db, cache) {
 }
 
 
+// wrap all 3rd party api calls into one function
 async function fetchExchangeRates(db, cache) {
     await fetchKrakenRates(db, cache);
     await fetchBittrexRates(db, cache);
@@ -408,6 +411,7 @@ function Rates(cache, symbol) {
 
 
 //Express stuff for handling incoming connections
+app.use(compression());
 app.use(helmet());
 app.use(express.static('dist'));
 
