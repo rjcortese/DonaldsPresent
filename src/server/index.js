@@ -136,7 +136,7 @@ async function fetchKrakenRates(db, cache) {
         cache.updateBestLtc();
 
         //store in db
-        await db.tx(t => {
+        db.tx(t => {
             return t.batch([
                 t.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                     ['kraken', 'dash', dashRate]),
@@ -149,7 +149,7 @@ async function fetchKrakenRates(db, cache) {
     } catch (err) {
         console.log(err);
     }
-    return Promise.resolve();
+    return;
 }
 
 
@@ -166,7 +166,7 @@ async function fetchBittrexRates(db, cache) {
         cache.updateBestEth();
 
         //store in db
-        await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+        db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                 ['bittrex', 'eth', ethRate]);
 
     } catch (err) {
@@ -185,7 +185,7 @@ async function fetchBittrexRates(db, cache) {
         cache.updateBestLtc();
 
         //store in db
-        await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+        db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                 ['bittrex', 'ltc', ltcRate]);
     } catch (err) {
         console.log(err);
@@ -203,12 +203,12 @@ async function fetchBittrexRates(db, cache) {
         cache.updateBestDash();
 
         //store in db
-        await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+        db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                 ['bittrex', 'dash', dashRate]);
     } catch (err) {
         console.log(err);
     }
-    return Promise.resolve();
+    return;
 }
 
 
@@ -228,7 +228,7 @@ async function fetchBinanceRates(db, cache) {
                 cache.updateBestEth();
 
                 //store in db
-                await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+                db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                     ['binance', 'eth', ethRate]);
             }
             else if (myjson[i].symbol === 'DASHBTC') {
@@ -241,7 +241,7 @@ async function fetchBinanceRates(db, cache) {
                 cache.updateBestDash();
 
                 //store in db
-                await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+                db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                     ['binance', 'dash', dashRate]);
             }
             else if (myjson[i].symbol === 'LTCBTC') {
@@ -254,14 +254,14 @@ async function fetchBinanceRates(db, cache) {
                 cache.updateBestLtc();
 
                 //store in db
-                await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+                db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                     ['binance', 'ltc', ltcRate]);
             }
         }
     } catch (err) {
         console.log(err);
     }
-    return Promise.resolve();
+    return; 
 }
 
 
@@ -278,7 +278,7 @@ async function fetchCoincapRates(db, cache) {
         cache.updateBestEth();
 
         //store in db
-        await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+        db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                 ['coincap', 'eth', ethRate]);
     } catch (err) {
         console.log(err);
@@ -296,7 +296,7 @@ async function fetchCoincapRates(db, cache) {
         cache.updateBestDash();
 
         //store in db
-        await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+        db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                 ['coincap', 'dash', dashRate]);
     } catch (err) {
         console.log(err);
@@ -314,12 +314,12 @@ async function fetchCoincapRates(db, cache) {
         cache.updateBestLtc();
 
         //store in db
-        await db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
+        db.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                 ['coincap', 'ltc', ltcRate]);
     } catch (err) {
         console.log(err);
     }
-    return Promise.resolve();
+    return;
 }
 
 
@@ -343,7 +343,7 @@ async function fetchPoloniexRates(db, cache) {
         cache.updateBestLtc();
 
         //store in db
-        await db.tx(t => {
+        db.tx(t => {
             return t.batch([
                 t.none('INSERT INTO exchange_data (exchange, symbol, rate) VALUES($1, $2, $3)',
                     ['poloniex', 'dash', myjson.BTC_DASH.lowestAsk]),
@@ -356,17 +356,17 @@ async function fetchPoloniexRates(db, cache) {
     } catch (err) {
         console.log(err);
     }
-    return Promise.resolve();
+    return;
 }
 
 
 // wrap all 3rd party api calls into one function
 async function fetchExchangeRates(db, cache) {
-    await fetchKrakenRates(db, cache);
-    await fetchBittrexRates(db, cache);
-    await fetchBinanceRates(db, cache);
-    await fetchCoincapRates(db, cache);
-    await fetchPoloniexRates(db, cache);
+    fetchKrakenRates(db, cache);
+    fetchBittrexRates(db, cache);
+    fetchBinanceRates(db, cache);
+    fetchCoincapRates(db, cache);
+    fetchPoloniexRates(db, cache);
 }
 
 
